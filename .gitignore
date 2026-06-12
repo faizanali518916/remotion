@@ -5,3 +5,9 @@ dist
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# Local raw media assets used by Remotion drafts.
+public/assets/
+
+# Ignore bundled files from the build process.
+build/

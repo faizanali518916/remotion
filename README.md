@@ -1,4 +1,4 @@
-# Remotion video
+# Remotion Multi-Project Workspace
 
 <p align="center">
   <a href="https://github.com/remotion-dev/logo">
@@ -9,7 +9,22 @@
   </a>
 </p>
 
-Welcome to your Remotion project!
+This repo is set up to host multiple Remotion video projects while sharing one root toolchain (`.agents`, `package.json`, TypeScript, ESLint, etc.).
+
+## Workspace Structure
+
+Each project lives under `src/projects/<project-name>/` and exports a `VideoProject` object.
+
+Registered projects are combined in `src/projects/index.ts`, and `src/RemotionRoot.tsx` auto-registers all compositions in Remotion Studio.
+
+Composition IDs follow this pattern:
+
+`<projectId>__<compositionId>`
+
+Examples:
+
+- `spctek__brand-demo`
+- `starter__starter-demo`
 
 ## Commands
 
@@ -28,7 +43,13 @@ npm run dev
 **Render video**
 
 ```console
-npx remotion render
+npm run render
+```
+
+**Render a specific composition**
+
+```console
+npm run render -- spctek__brand-demo
 ```
 
 **Upgrade Remotion**
@@ -40,6 +61,13 @@ npx remotion upgrade
 ## Docs
 
 Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
+
+## Add a New Project
+
+1. Copy `src/projects/starter` into a new folder: `src/projects/<your-project>`.
+2. Replace the starter composition with your own scenes/components.
+3. Update the exported project metadata (`id`, `compositions`) in that project's `index.ts`.
+4. Import and add the project to the `projects` array in `src/projects/index.ts`.
 
 ## Help
 

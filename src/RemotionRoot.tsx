@@ -1,23 +1,22 @@
 import "./index.css";
 import React from "react";
 import { Composition } from "remotion";
-import {
-  SPCTEK_DURATION_IN_FRAMES,
-  SPCTEK_FPS,
-  SPCTEK_HEIGHT,
-  SPCTEK_WIDTH,
-  SpctekAiBrandDemo,
-} from "./SpctekAiBrandDemo";
+import { registeredCompositions } from "./projects";
 
 export const RemotionRoot: React.FC = () => {
   return (
-    <Composition
-      id="SpctekAiBrandDemo"
-      component={SpctekAiBrandDemo}
-      durationInFrames={SPCTEK_DURATION_IN_FRAMES}
-      fps={SPCTEK_FPS}
-      width={SPCTEK_WIDTH}
-      height={SPCTEK_HEIGHT}
-    />
+    <>
+      {registeredCompositions.map((composition) => (
+        <Composition
+          key={composition.fullId}
+          id={composition.fullId}
+          component={composition.component}
+          durationInFrames={composition.durationInFrames}
+          fps={composition.fps}
+          width={composition.width}
+          height={composition.height}
+        />
+      ))}
+    </>
   );
 };
