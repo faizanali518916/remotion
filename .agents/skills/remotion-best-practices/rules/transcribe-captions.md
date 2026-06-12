@@ -23,25 +23,20 @@ npx remotion add @remotion/install-whisper-cpp
 Make a Node.js script to download Whisper.cpp and a model, and transcribe the audio.
 
 ```ts
-import path from "path";
-import {
-  downloadWhisperModel,
-  installWhisperCpp,
-  transcribe,
-  toCaptions,
-} from "@remotion/install-whisper-cpp";
-import fs from "fs";
+import fs from 'fs';
+import path from 'path';
+import { downloadWhisperModel, installWhisperCpp, toCaptions, transcribe } from '@remotion/install-whisper-cpp';
 
-const to = path.join(process.cwd(), "whisper.cpp");
+const to = path.join(process.cwd(), 'whisper.cpp');
 
 await installWhisperCpp({
-  to,
-  version: "1.5.5",
+	to,
+	version: '1.5.5',
 });
 
 await downloadWhisperModel({
-  model: "medium.en",
-  folder: to,
+	model: 'medium.en',
+	folder: to,
 });
 
 // Convert the audio to a 16KHz wav file first if needed:
@@ -49,20 +44,20 @@ await downloadWhisperModel({
 // execSync('ffmpeg -i /path/to/audio.mp4 -ar 16000 /path/to/audio.wav -y');
 
 const whisperCppOutput = await transcribe({
-  model: "medium.en",
-  whisperPath: to,
-  whisperCppVersion: "1.5.5",
-  inputPath: "/path/to/audio123.wav",
-  tokenLevelTimestamps: true,
+	model: 'medium.en',
+	whisperPath: to,
+	whisperCppVersion: '1.5.5',
+	inputPath: '/path/to/audio123.wav',
+	tokenLevelTimestamps: true,
 });
 
 // Optional: Apply our recommended postprocessing
 const { captions } = toCaptions({
-  whisperCppOutput,
+	whisperCppOutput,
 });
 
 // Write it to the public/ folder so it can be fetched from Remotion
-fs.writeFileSync("captions123.json", JSON.stringify(captions, null, 2));
+fs.writeFileSync('captions123.json', JSON.stringify(captions, null, 2));
 ```
 
 Transcribe each clip individually and create multiple JSON files.

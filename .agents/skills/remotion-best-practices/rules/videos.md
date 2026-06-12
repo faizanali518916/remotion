@@ -22,11 +22,11 @@ pnpm exec remotion add @remotion/media # If project uses pnpm
 Use `<Video>` from `@remotion/media` to embed videos into your composition.
 
 ```tsx
-import { Video } from "@remotion/media";
-import { staticFile } from "remotion";
+import { Video } from '@remotion/media';
+import { staticFile } from 'remotion';
 
 export const MyComposition = () => {
-  return <Video src={staticFile("video.mp4")} />;
+	return <Video src={staticFile('video.mp4')} />;
 };
 ```
 
@@ -44,11 +44,11 @@ Use `trimBefore` and `trimAfter` to remove portions of the video. Values are in 
 const { fps } = useVideoConfig();
 
 return (
-  <Video
-    src={staticFile("video.mp4")}
-    trimBefore={2 * fps} // Skip the first 2 seconds
-    trimAfter={10 * fps} // End at the 10 second mark
-  />
+	<Video
+		src={staticFile('video.mp4')}
+		trimBefore={2 * fps} // Skip the first 2 seconds
+		trimAfter={10 * fps} // End at the 10 second mark
+	/>
 );
 ```
 
@@ -57,15 +57,15 @@ return (
 Wrap the video in a `<Sequence>` to delay when it appears:
 
 ```tsx
-import { Sequence, staticFile } from "remotion";
-import { Video } from "@remotion/media";
+import { Video } from '@remotion/media';
+import { Sequence, staticFile } from 'remotion';
 
 const { fps } = useVideoConfig();
 
 return (
-  <Sequence from={1 * fps}>
-    <Video src={staticFile("video.mp4")} />
-  </Sequence>
+	<Sequence from={1 * fps}>
+		<Video src={staticFile('video.mp4')} />
+	</Sequence>
 );
 ```
 
@@ -77,15 +77,15 @@ Use the `style` prop to control size and position:
 
 ```tsx
 <Video
-  src={staticFile("video.mp4")}
-  style={{
-    width: 500,
-    height: 300,
-    position: "absolute",
-    top: 100,
-    left: 50,
-    objectFit: "cover",
-  }}
+	src={staticFile('video.mp4')}
+	style={{
+		width: 500,
+		height: 300,
+		position: 'absolute',
+		top: 100,
+		left: 50,
+		objectFit: 'cover',
+	}}
 />
 ```
 
@@ -94,30 +94,28 @@ Use the `style` prop to control size and position:
 Set a static volume (0 to 1):
 
 ```tsx
-<Video src={staticFile("video.mp4")} volume={0.5} />
+<Video src={staticFile('video.mp4')} volume={0.5} />
 ```
 
 Or use a callback for dynamic volume based on the current frame:
 
 ```tsx
-import { interpolate } from "remotion";
+import { interpolate } from 'remotion';
 
 const { fps } = useVideoConfig();
 
 return (
-  <Video
-    src={staticFile("video.mp4")}
-    volume={(f) =>
-      interpolate(f, [0, 1 * fps], [0, 1], { extrapolateRight: "clamp" })
-    }
-  />
+	<Video
+		src={staticFile('video.mp4')}
+		volume={(f) => interpolate(f, [0, 1 * fps], [0, 1], { extrapolateRight: 'clamp' })}
+	/>
 );
 ```
 
 Use `muted` to silence the video entirely:
 
 ```tsx
-<Video src={staticFile("video.mp4")} muted />
+<Video src={staticFile('video.mp4')} muted />
 ```
 
 ## Speed
@@ -136,7 +134,7 @@ Reverse playback is not supported.
 Use `loop` to loop the video indefinitely:
 
 ```tsx
-<Video src={staticFile("video.mp4")} loop />
+<Video src={staticFile('video.mp4')} loop />
 ```
 
 Use `loopVolumeCurveBehavior` to control how the frame count behaves when looping:
@@ -146,10 +144,10 @@ Use `loopVolumeCurveBehavior` to control how the frame count behaves when loopin
 
 ```tsx
 <Video
-  src={staticFile("video.mp4")}
-  loop
-  loopVolumeCurveBehavior="extend"
-  volume={(f) => interpolate(f, [0, 300], [1, 0])} // Fade out over multiple loops
+	src={staticFile('video.mp4')}
+	loop
+	loopVolumeCurveBehavior="extend"
+	volume={(f) => interpolate(f, [0, 300], [1, 0])} // Fade out over multiple loops
 />
 ```
 

@@ -8,42 +8,42 @@ metadata:
 Use `<Sequence>` to delay when an element appears in the timeline.
 
 ```tsx
-import { Sequence } from "remotion";
+import { Sequence } from 'remotion';
 
 export const Title = () => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+	const frame = useCurrentFrame();
+	const { fps } = useVideoConfig();
 
-  const opacity = interpolate(frame, [0, 2 * fps], [0, 1], {
-    extrapolateRight: "clamp",
-    extrapolateLeft: "clamp",
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-  });
+	const opacity = interpolate(frame, [0, 2 * fps], [0, 1], {
+		extrapolateRight: 'clamp',
+		extrapolateLeft: 'clamp',
+		easing: Easing.bezier(0.16, 1, 0.3, 1),
+	});
 
-  return <div style={{ opacity }}>Title</div>;
+	return <div style={{ opacity }}>Title</div>;
 };
 
 export const Subtitle = () => {
-  return <div>Subtitle</div>;
+	return <div>Subtitle</div>;
 };
 
 const Main = () => {
-  const {fps} = useVideoConfig();
+	const { fps } = useVideoConfig();
 
-  return (
-    <AbsoluteFill>
-      <Sequence>
-        <Background />
-      </Sequence>
-      <Sequence from={1 * fps} durationInFrames={2 * fps} layout="none">
-        <Title />
-      </Sequence>
-      <Sequence from={2 * fps} durationInFrames={2 * fps} layout="none">
-        <Subtitle />
-      </Sequence>
-    </AbsoluteFill>
-  );
-}
+	return (
+		<AbsoluteFill>
+			<Sequence>
+				<Background />
+			</Sequence>
+			<Sequence from={1 * fps} durationInFrames={2 * fps} layout="none">
+				<Title />
+			</Sequence>
+			<Sequence from={2 * fps} durationInFrames={2 * fps} layout="none">
+				<Subtitle />
+			</Sequence>
+		</AbsoluteFill>
+	);
+};
 ```
 
 This will by default wrap the component in an absolute fill element.  
@@ -51,7 +51,7 @@ If the items should not be wrapped, use the `layout` prop:
 
 ```tsx
 <Sequence layout="none">
-  <Title />
+	<Title />
 </Sequence>
 ```
 
@@ -62,7 +62,7 @@ Always premount any `<Sequence>`!
 
 ```tsx
 <Sequence premountFor={1 * fps}>
-  <Title />
+	<Title />
 </Sequence>
 ```
 
@@ -71,18 +71,18 @@ Always premount any `<Sequence>`!
 Use `<Series>` when elements should play one after another without overlap.
 
 ```tsx
-import { Series } from "remotion";
+import { Series } from 'remotion';
 
 <Series>
-  <Series.Sequence durationInFrames={45}>
-    <Intro />
-  </Series.Sequence>
-  <Series.Sequence durationInFrames={60}>
-    <MainContent />
-  </Series.Sequence>
-  <Series.Sequence durationInFrames={30}>
-    <Outro />
-  </Series.Sequence>
+	<Series.Sequence durationInFrames={45}>
+		<Intro />
+	</Series.Sequence>
+	<Series.Sequence durationInFrames={60}>
+		<MainContent />
+	</Series.Sequence>
+	<Series.Sequence durationInFrames={30}>
+		<Outro />
+	</Series.Sequence>
 </Series>;
 ```
 
@@ -94,13 +94,13 @@ Use negative offset for overlapping sequences:
 
 ```tsx
 <Series>
-  <Series.Sequence durationInFrames={60}>
-    <SceneA />
-  </Series.Sequence>
-  <Series.Sequence offset={-15} durationInFrames={60}>
-    {/* Starts 15 frames before SceneA ends */}
-    <SceneB />
-  </Series.Sequence>
+	<Series.Sequence durationInFrames={60}>
+		<SceneA />
+	</Series.Sequence>
+	<Series.Sequence offset={-15} durationInFrames={60}>
+		{/* Starts 15 frames before SceneA ends */}
+		<SceneB />
+	</Series.Sequence>
 </Series>
 ```
 
@@ -110,8 +110,8 @@ Inside a Sequence, `useCurrentFrame()` returns the local frame (starting from 0)
 
 ```tsx
 <Sequence from={60} durationInFrames={30}>
-  <MyComponent />
-  {/* Inside MyComponent, useCurrentFrame() returns 0-29, not 60-89 */}
+	<MyComponent />
+	{/* Inside MyComponent, useCurrentFrame() returns 0-29, not 60-89 */}
 </Sequence>
 ```
 
@@ -121,13 +121,13 @@ Sequences can be nested for complex timing:
 
 ```tsx
 <Sequence from={0} durationInFrames={120}>
-  <Background />
-  <Sequence from={15} durationInFrames={90} layout="none">
-    <Title />
-  </Sequence>
-  <Sequence from={45} durationInFrames={60} layout="none">
-    <Subtitle />
-  </Sequence>
+	<Background />
+	<Sequence from={15} durationInFrames={90} layout="none">
+		<Title />
+	</Sequence>
+	<Sequence from={45} durationInFrames={60} layout="none">
+		<Subtitle />
+	</Sequence>
 </Sequence>
 ```
 
@@ -137,8 +137,8 @@ To add a composition within another composition, you can use the `<Sequence>` co
 
 ```tsx
 <AbsoluteFill>
-  <Sequence width={COMPOSITION_WIDTH} height={COMPOSITION_HEIGHT}>
-    <CompositionComponent />
-  </Sequence>
+	<Sequence width={COMPOSITION_WIDTH} height={COMPOSITION_HEIGHT}>
+		<CompositionComponent />
+	</Sequence>
 </AbsoluteFill>
 ```

@@ -22,19 +22,19 @@ npx remotion add @remotion/light-leaks
 ## Basic usage with TransitionSeries
 
 ```tsx
-import { TransitionSeries } from "@remotion/transitions";
-import { LightLeak } from "@remotion/light-leaks";
+import { LightLeak } from '@remotion/light-leaks';
+import { TransitionSeries } from '@remotion/transitions';
 
 <TransitionSeries>
-  <TransitionSeries.Sequence durationInFrames={60}>
-    <SceneA />
-  </TransitionSeries.Sequence>
-  <TransitionSeries.Overlay durationInFrames={30}>
-    <LightLeak />
-  </TransitionSeries.Overlay>
-  <TransitionSeries.Sequence durationInFrames={60}>
-    <SceneB />
-  </TransitionSeries.Sequence>
+	<TransitionSeries.Sequence durationInFrames={60}>
+		<SceneA />
+	</TransitionSeries.Sequence>
+	<TransitionSeries.Overlay durationInFrames={30}>
+		<LightLeak />
+	</TransitionSeries.Overlay>
+	<TransitionSeries.Sequence durationInFrames={60}>
+		<SceneB />
+	</TransitionSeries.Sequence>
 </TransitionSeries>;
 ```
 
@@ -47,7 +47,7 @@ import { LightLeak } from "@remotion/light-leaks";
 ## Customizing the look
 
 ```tsx
-import { LightLeak } from "@remotion/light-leaks";
+import { LightLeak } from '@remotion/light-leaks';
 
 // Blue-tinted light leak with a different pattern
 <LightLeak seed={5} hueShift={240} />;
@@ -61,13 +61,13 @@ import { LightLeak } from "@remotion/light-leaks";
 `<LightLeak>` can also be used outside of `<TransitionSeries>`, for example as a decorative overlay in any composition:
 
 ```tsx
-import { AbsoluteFill } from "remotion";
-import { LightLeak } from "@remotion/light-leaks";
+import { LightLeak } from '@remotion/light-leaks';
+import { AbsoluteFill } from 'remotion';
 
 const MyComp: React.FC = () => (
-  <AbsoluteFill>
-    <MyContent />
-    <LightLeak durationInFrames={60} seed={3} />
-  </AbsoluteFill>
+	<AbsoluteFill>
+		<MyContent />
+		<LightLeak durationInFrames={60} seed={3} />
+	</AbsoluteFill>
 );
 ```

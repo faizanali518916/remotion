@@ -54,17 +54,18 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 ## Basic map example
 
 ```tsx
-import {useEffect, useRef, useState} from 'react';
-import {AbsoluteFill, useDelayRender, useVideoConfig} from 'remotion';
+import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
+import { AbsoluteFill, useDelayRender, useVideoConfig } from 'remotion';
+
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const zurich: [number, number] = [8.5417, 47.3769];
 
 export const MyComposition = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const {delayRender, continueRender} = useDelayRender();
-	const {width, height} = useVideoConfig();
+	const { delayRender, continueRender } = useDelayRender();
+	const { width, height } = useVideoConfig();
 	const [loadingHandle] = useState(() => delayRender('Loading map'));
 
 	useEffect(() => {
@@ -86,7 +87,7 @@ export const MyComposition = () => {
 		});
 
 		mapInstance.on('load', () => {
-			mapInstance.jumpTo({center: zurich, zoom: 7});
+			mapInstance.jumpTo({ center: zurich, zoom: 7 });
 			mapInstance.once('idle', () => {
 				continueRender(loadingHandle);
 			});
@@ -95,7 +96,7 @@ export const MyComposition = () => {
 
 	return (
 		<AbsoluteFill>
-			<div ref={containerRef} style={{width, height, position: 'absolute'}} />
+			<div ref={containerRef} style={{ width, height, position: 'absolute' }} />
 		</AbsoluteFill>
 	);
 };
@@ -114,24 +115,18 @@ This example shows the recommended pattern for route animations:
 - Frame 0 is prepared before `continueRender()`.
 
 ```tsx
+import { useEffect, useRef, useState } from 'react';
 import * as turf from '@turf/turf';
-import {useEffect, useRef, useState} from 'react';
-import {
-	AbsoluteFill,
-	Easing,
-	interpolate,
-	useCurrentFrame,
-	useDelayRender,
-	useVideoConfig,
-} from 'remotion';
-import maplibregl, {type GeoJSONSource, type Map} from 'maplibre-gl';
+import maplibregl, { type GeoJSONSource, type Map } from 'maplibre-gl';
+import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useDelayRender, useVideoConfig } from 'remotion';
+
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const zurich: [number, number] = [8.5417, 47.3769];
 const newYork: [number, number] = [-74.006, 40.7128];
 
 const greatCircleLine = (from: [number, number], to: [number, number]) => {
-	const route = turf.greatCircle(from, to, {npoints: 100});
+	const route = turf.greatCircle(from, to, { npoints: 100 });
 
 	if (route.geometry.type === 'LineString') {
 		return turf.lineString(route.geometry.coordinates);
@@ -153,8 +148,8 @@ const cameraRoute = greatCircleLine(zurich, newYork);
 const cameraRouteDistance = turf.length(cameraRoute);
 
 const cityMarkers = turf.featureCollection([
-	turf.point(zurich, {name: 'Zurich'}),
-	turf.point(newYork, {name: 'New York'}),
+	turf.point(zurich, { name: 'Zurich' }),
+	turf.point(newYork, { name: 'New York' }),
 ]);
 
 const clampProgress = (progress: number) => Math.min(1, Math.max(0, progress));
@@ -165,40 +160,25 @@ const distanceAlong = (totalDistance: number, progress: number) => {
 };
 
 const getPartialTargetRoute = (progress: number) => {
-	return turf.lineSliceAlong(
-		targetRoute,
-		0,
-		distanceAlong(targetRouteDistance, progress),
-	);
+	return turf.lineSliceAlong(targetRoute, 0, distanceAlong(targetRouteDistance, progress));
 };
 
-const getCameraOptions = (
-	map: Map,
-	progress: number,
-	cameraAltitudeMeters: number,
-	cameraLatitudeOffset: number,
-) => {
-	const target = turf.along(
-		targetRoute,
-		distanceAlong(targetRouteDistance, progress),
-	).geometry.coordinates;
-	const camera = turf.along(
-		cameraRoute,
-		distanceAlong(cameraRouteDistance, progress),
-	).geometry.coordinates;
+const getCameraOptions = (map: Map, progress: number, cameraAltitudeMeters: number, cameraLatitudeOffset: number) => {
+	const target = turf.along(targetRoute, distanceAlong(targetRouteDistance, progress)).geometry.coordinates;
+	const camera = turf.along(cameraRoute, distanceAlong(cameraRouteDistance, progress)).geometry.coordinates;
 
 	return map.calculateCameraOptionsFromTo(
 		new maplibregl.LngLat(camera[0], camera[1] - cameraLatitudeOffset),
 		cameraAltitudeMeters,
-		new maplibregl.LngLat(target[0], target[1]),
+		new maplibregl.LngLat(target[0], target[1])
 	);
 };
 
 export const MyComposition = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const frame = useCurrentFrame();
-	const {delayRender, continueRender} = useDelayRender();
-	const {durationInFrames, height, width} = useVideoConfig();
+	const { delayRender, continueRender } = useDelayRender();
+	const { durationInFrames, height, width } = useVideoConfig();
 	const [map, setMap] = useState<Map | null>(null);
 	const [loadingHandle] = useState(() => delayRender('Loading MapLibre map'));
 
@@ -298,37 +278,20 @@ export const MyComposition = () => {
 			extrapolateRight: 'clamp',
 			easing: Easing.inOut(Easing.cubic),
 		});
-		const cameraAltitudeMeters = interpolate(
-			timelineProgress,
-			[0, 0.28, 0.74, 1],
-			[180000, 2200000, 2200000, 180000],
-			{
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-				easing: Easing.inOut(Easing.cubic),
-			},
-		);
-		const cameraLatitudeOffset = interpolate(
-			timelineProgress,
-			[0, 0.28, 0.74, 1],
-			[1.1, 8, 8, 1.1],
-			{
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-				easing: Easing.inOut(Easing.cubic),
-			},
-		);
+		const cameraAltitudeMeters = interpolate(timelineProgress, [0, 0.28, 0.74, 1], [180000, 2200000, 2200000, 180000], {
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+			easing: Easing.inOut(Easing.cubic),
+		});
+		const cameraLatitudeOffset = interpolate(timelineProgress, [0, 0.28, 0.74, 1], [1.1, 8, 8, 1.1], {
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+			easing: Easing.inOut(Easing.cubic),
+		});
 		const trace = map.getSource('trace') as GeoJSONSource | undefined;
 
 		trace?.setData(getPartialTargetRoute(travelProgress));
-		map.jumpTo(
-			getCameraOptions(
-				map,
-				travelProgress,
-				cameraAltitudeMeters,
-				cameraLatitudeOffset,
-			),
-		);
+		map.jumpTo(getCameraOptions(map, travelProgress, cameraAltitudeMeters, cameraLatitudeOffset));
 
 		map.once('idle', () => continueRender(handle));
 		// Force an idle event even if the camera parameters are unchanged from the previous frame.
@@ -336,8 +299,8 @@ export const MyComposition = () => {
 	}, [continueRender, delayRender, durationInFrames, frame, map]);
 
 	return (
-		<AbsoluteFill style={{backgroundColor: '#e8eef3'}}>
-			<div ref={containerRef} style={{height, position: 'absolute', width}} />
+		<AbsoluteFill style={{ backgroundColor: '#e8eef3' }}>
+			<div ref={containerRef} style={{ height, position: 'absolute', width }} />
 		</AbsoluteFill>
 	);
 };
@@ -366,8 +329,8 @@ map.jumpTo(
 	map.calculateCameraOptionsFromTo(
 		new maplibregl.LngLat(camera[0], camera[1]),
 		cameraAltitudeMeters,
-		new maplibregl.LngLat(target[0], target[1]),
-	),
+		new maplibregl.LngLat(target[0], target[1])
+	)
 );
 ```
 
@@ -386,7 +349,7 @@ const partialLine = turf.lineSliceAlong(
 	line,
 	0,
 	// Keep the route non-empty at progress 0.
-	Math.max(0.001, distance * progress),
+	Math.max(0.001, distance * progress)
 );
 ```
 
@@ -399,9 +362,7 @@ Use map-native GeoJSON layers for markers and labels:
 ```tsx
 mapInstance.addSource('markers', {
 	type: 'geojson',
-	data: turf.featureCollection([
-		turf.point([-118.2437, 34.0522], {name: 'Los Angeles'}),
-	]),
+	data: turf.featureCollection([turf.point([-118.2437, 34.0522], { name: 'Los Angeles' })]),
 });
 
 mapInstance.addLayer({
@@ -442,7 +403,7 @@ Make marker sizes and label font sizes large enough for the composition resoluti
 Default to the stock MapLibre demo style:
 
 ```ts
-style: 'https://demotiles.maplibre.org/style.json'
+style: 'https://demotiles.maplibre.org/style.json';
 ```
 
 If the user requests another style, use any valid MapLibre style JSON URL.

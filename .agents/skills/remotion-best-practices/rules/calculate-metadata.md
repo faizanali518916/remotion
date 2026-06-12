@@ -11,14 +11,14 @@ Use `calculateMetadata` on a `<Composition>` to dynamically set duration, dimens
 
 ```tsx
 <Composition
-  id="MyComp"
-  component={MyComponent}
-  durationInFrames={300}
-  fps={30}
-  width={1920}
-  height={1080}
-  defaultProps={{ videoSrc: "https://remotion.media/video.mp4" }}
-  calculateMetadata={calculateMetadata}
+	id="MyComp"
+	component={MyComponent}
+	durationInFrames={300}
+	fps={30}
+	width={1920}
+	height={1080}
+	defaultProps={{ videoSrc: 'https://remotion.media/video.mp4' }}
+	calculateMetadata={calculateMetadata}
 />
 ```
 
@@ -27,17 +27,16 @@ Use `calculateMetadata` on a `<Composition>` to dynamically set duration, dimens
 Use the [`getVideoDuration`](./get-video-duration.md) and [`getVideoDimensions`](./get-video-dimensions.md) skills to get the video duration and dimensions:
 
 ```tsx
-import { CalculateMetadataFunction } from "remotion";
-import { getVideoDuration } from "./get-video-duration";
+import { CalculateMetadataFunction } from 'remotion';
 
-const calculateMetadata: CalculateMetadataFunction<Props> = async ({
-  props,
-}) => {
-  const durationInSeconds = await getVideoDuration(props.videoSrc);
+import { getVideoDuration } from './get-video-duration';
 
-  return {
-    durationInFrames: Math.ceil(durationInSeconds * 30),
-  };
+const calculateMetadata: CalculateMetadataFunction<Props> = async ({ props }) => {
+	const durationInSeconds = await getVideoDuration(props.videoSrc);
+
+	return {
+		durationInFrames: Math.ceil(durationInSeconds * 30),
+	};
 };
 ```
 
@@ -46,41 +45,33 @@ const calculateMetadata: CalculateMetadataFunction<Props> = async ({
 Use the [`getVideoDimensions`](./get-video-dimensions.md) skill to get the video dimensions:
 
 ```tsx
-import { CalculateMetadataFunction } from "remotion";
-import { getVideoDuration } from "./get-video-duration";
-import { getVideoDimensions } from "./get-video-dimensions";
+import { CalculateMetadataFunction } from 'remotion';
 
-const calculateMetadata: CalculateMetadataFunction<Props> = async ({
-  props,
-}) => {
-  const dimensions = await getVideoDimensions(props.videoSrc);
+import { getVideoDimensions } from './get-video-dimensions';
+import { getVideoDuration } from './get-video-duration';
 
-  return {
-    width: dimensions.width,
-    height: dimensions.height,
-  };
+const calculateMetadata: CalculateMetadataFunction<Props> = async ({ props }) => {
+	const dimensions = await getVideoDimensions(props.videoSrc);
+
+	return {
+		width: dimensions.width,
+		height: dimensions.height,
+	};
 };
 ```
 
 ## Setting duration based on multiple videos
 
 ```tsx
-const calculateMetadata: CalculateMetadataFunction<Props> = async ({
-  props,
-}) => {
-  const metadataPromises = props.videos.map((video) =>
-    getVideoDuration(video.src),
-  );
-  const allMetadata = await Promise.all(metadataPromises);
+const calculateMetadata: CalculateMetadataFunction<Props> = async ({ props }) => {
+	const metadataPromises = props.videos.map((video) => getVideoDuration(video.src));
+	const allMetadata = await Promise.all(metadataPromises);
 
-  const totalDuration = allMetadata.reduce(
-    (sum, durationInSeconds) => sum + durationInSeconds,
-    0,
-  );
+	const totalDuration = allMetadata.reduce((sum, durationInSeconds) => sum + durationInSeconds, 0);
 
-  return {
-    durationInFrames: Math.ceil(totalDuration * 30),
-  };
+	return {
+		durationInFrames: Math.ceil(totalDuration * 30),
+	};
 };
 ```
 
@@ -89,12 +80,10 @@ const calculateMetadata: CalculateMetadataFunction<Props> = async ({
 Set the default output filename based on props:
 
 ```tsx
-const calculateMetadata: CalculateMetadataFunction<Props> = async ({
-  props,
-}) => {
-  return {
-    defaultOutName: `video-${props.id}`, // .mp4 is added automatically
-  };
+const calculateMetadata: CalculateMetadataFunction<Props> = async ({ props }) => {
+	return {
+		defaultOutName: `video-${props.id}`, // .mp4 is added automatically
+	};
 };
 ```
 
@@ -103,19 +92,16 @@ const calculateMetadata: CalculateMetadataFunction<Props> = async ({
 Fetch data or transform props before rendering:
 
 ```tsx
-const calculateMetadata: CalculateMetadataFunction<Props> = async ({
-  props,
-  abortSignal,
-}) => {
-  const response = await fetch(props.dataUrl, { signal: abortSignal });
-  const data = await response.json();
+const calculateMetadata: CalculateMetadataFunction<Props> = async ({ props, abortSignal }) => {
+	const response = await fetch(props.dataUrl, { signal: abortSignal });
+	const data = await response.json();
 
-  return {
-    props: {
-      ...props,
-      fetchedData: data,
-    },
-  };
+	return {
+		props: {
+			...props,
+			fetchedData: data,
+		},
+	};
 };
 ```
 
